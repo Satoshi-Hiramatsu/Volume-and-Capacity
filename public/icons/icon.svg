@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- 背景グラデーション -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="50%" stop-color="#0369a1"/>
+      <stop offset="100%" stop-color="#075985"/>
+    </linearGradient>
+
+    <!-- 水のグラデーション -->
+    <linearGradient id="waterGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="40%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+
+    <!-- 水面ハイライト -->
+    <linearGradient id="surfaceGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#bae6fd" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#7dd3fc" stop-opacity="0.9"/>
+    </linearGradient>
+
+    <!-- ガラスハイライト -->
+    <linearGradient id="glassReflection" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4"/>
+      <stop offset="15%" stop-color="#ffffff" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- ドロップシャドウ -->
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#0f172a" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- 背景プレート (角丸アプリアイコン) -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+  
+  <!-- 微細な背景の波紋 -->
+  <circle cx="256" cy="270" r="190" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.2"/>
+  <circle cx="256" cy="270" r="230" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.12"/>
+
+  <!-- メイン：1L計量ます (3D風ガラスキューブ) -->
+  <g filter="url(#softShadow)" transform="translate(106, 120)">
+    <!-- ますの背面壁 -->
+    <rect x="15" y="20" width="270" height="260" rx="20" fill="#034d75" opacity="0.4"/>
+
+    <!-- ます内部の水 (60%満たされている) -->
+    <path d="M 20 120 Q 80 112, 150 120 T 280 120 L 280 260 A 20 20 0 0 1 260 280 L 40 280 A 20 20 0 0 1 20 260 Z" fill="url(#waterGrad)"/>
+    
+    <!-- 水面の楕円ハイライト -->
+    <ellipse cx="150" cy="120" rx="130" ry="12" fill="url(#surfaceGrad)"/>
+
+    <!-- 水中の気泡 -->
+    <circle cx="70" cy="200" r="9" fill="#ffffff" opacity="0.5"/>
+    <circle cx="85" cy="160" r="5" fill="#ffffff" opacity="0.6"/>
+    <circle cx="220" cy="220" r="12" fill="#ffffff" opacity="0.4"/>
+    <circle cx="235" cy="170" r="7" fill="#ffffff" opacity="0.55"/>
+
+    <!-- ガラス外枠 (前面) -->
+    <rect x="15" y="20" width="270" height="260" rx="20" fill="none" stroke="#bae6fd" stroke-width="8"/>
+    <!-- 厚みのある底面 -->
+    <path d="M 15 260 L 15 265 A 20 20 0 0 0 35 285 L 265 285 A 20 20 0 0 0 285 265 L 285 260" fill="none" stroke="#e0f2fe" stroke-width="6"/>
+
+    <!-- 目盛り (1dL〜10dL) -->
+    <!-- 10dL (1L) -->
+    <line x1="20" y1="45" x2="65" y2="45" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/>
+    <text x="75" y="52" fill="#ffffff" font-family="'BIZ UDPGothic', sans-serif" font-size="22" font-weight="900">1L</text>
+    
+    <!-- 8dL -->
+    <line x1="20" y1="92" x2="52" y2="92" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    <!-- 6dL -->
+    <line x1="20" y1="139" x2="52" y2="139" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    <!-- 5dL (中太線) -->
+    <line x1="20" y1="162" x2="62" y2="162" stroke="#fbbf24" stroke-width="4.5" stroke-linecap="round"/>
+    <text x="70" y="169" fill="#fbbf24" font-family="'BIZ UDPGothic', sans-serif" font-size="18" font-weight="bold">5dL</text>
+    <!-- 4dL -->
+    <line x1="20" y1="186" x2="52" y2="186" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    <!-- 2dL -->
+    <line x1="20" y1="233" x2="52" y2="233" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- ガラスの縦反射ハイライト -->
+    <rect x="25" y="24" width="28" height="250" rx="8" fill="url(#glassReflection)"/>
+    <line x1="265" y1="30" x2="265" y2="265" stroke="#ffffff" stroke-width="3" opacity="0.4" stroke-linecap="round"/>
+  </g>
+
+  <!-- カサの妖精「ドロップくん」がピョンと顔を出している -->
+  <g transform="translate(260, 45)">
+    <!-- 妖精の体 (水滴) -->
+    <path d="M 75 10 C 45 55, 20 85, 20 125 A 55 55 0 0 0 130 125 C 130 85, 105 55, 75 10 Z" fill="#38bdf8" filter="drop-shadow(0 6px 12px rgba(0,0,0,0.3))"/>
+    <!-- ハイライト -->
+    <path d="M 75 25 C 55 60, 36 85, 36 115 A 35 35 0 0 0 114 115 C 114 85, 95 60, 75 25 Z" fill="#7dd3fc" opacity="0.6"/>
+    <circle cx="50" cy="85" r="10" fill="#ffffff" opacity="0.75"/>
+    
+    <!-- 笑顔の目 -->
+    <circle cx="58" cy="118" r="6.5" fill="#0f172a"/>
+    <circle cx="92" cy="118" r="6.5" fill="#0f172a"/>
+    <!-- 瞳のハイライト -->
+    <circle cx="55" cy="115" r="2.5" fill="#ffffff"/>
+    <circle cx="89" cy="115" r="2.5" fill="#ffffff"/>
+    
+    <!-- ほっぺ -->
+    <circle cx="46" cy="128" r="6.5" fill="#fb7185" opacity="0.8"/>
+    <circle cx="104" cy="128" r="6.5" fill="#fb7185" opacity="0.8"/>
+    
+    <!-- にっこり口 -->
+    <path d="M 67 128 Q 75 137, 83 128" stroke="#0f172a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    
+    <!-- 手を振っているポーズ -->
+    <path d="M 125 125 Q 145 110, 150 95" stroke="#38bdf8" stroke-width="7" stroke-linecap="round" fill="none"/>
+    <circle cx="150" cy="95" r="6" fill="#38bdf8"/>
+  </g>
+</svg>

@@ -1,0 +1,90 @@
+/* 算数かさ・容量 デザイントークン
+   教育アプリとしての見やすさ・親しみやすさ・色の意味性を定義 */
+:root {
+  /* 背景・紙・サーフェス */
+  --c-bg: #f0fdf4;
+  --c-paper: #f8fafc;
+  --c-surface: #ffffff;
+  --c-ink: #0f172a;
+  --c-ink-2: #334155;
+  --c-ink-3: #64748b;
+  --c-rule: #cbd5e1;
+  --c-rule-2: #94a3b8;
+  --c-rule-soft: #e2e8f0;
+
+  /* 単位ごとのシンボルカラー (教科書・教材標準に準拠) */
+  --c-unit-l: #2563eb;        /* L: 青・頼もしいメインカラー */
+  --c-unit-l-light: #dbeafe;
+  --c-unit-l-border: #1d4ed8;
+
+  --c-unit-dl: #ea580c;       /* dL: オレンジ・コップと中間の親しみやすさ */
+  --c-unit-dl-light: #ffedd5;
+  --c-unit-dl-border: #c2410c;
+
+  --c-unit-ml: #0891b2;       /* mL: ターコイズ・小さなしずく */
+  --c-unit-ml-light: #cffafe;
+  --c-unit-ml-border: #0e7490;
+
+  /* 水のグラデーション・透明感 */
+  --c-water-top: #7dd3fc;
+  --c-water-mid: #38bdf8;
+  --c-water-bot: #0284c7;
+  --c-water-glare: rgba(255, 255, 255, 0.45);
+  --c-glass-edge: rgba(14, 165, 233, 0.35);
+  --c-glass-bg: rgba(240, 249, 255, 0.65);
+
+  /* アクション・フィードバック */
+  --c-accent: #f59e0b;
+  --c-accent-hover: #d97706;
+  --c-correct: #16a34a;
+  --c-correct-soft: #dcfce7;
+  --c-retry: #64748b;
+  --c-retry-soft: #f1f5f9;
+  --c-danger: #dc2626;
+  --c-focus: #0284c7;
+
+  /* 影 */
+  --c-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
+  --c-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --c-shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.12), 0 4px 6px -4px rgba(0, 0, 0, 0.06);
+  --c-shadow-pop: 0 6px 0 var(--c-rule-2);
+
+  /* 角丸 */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+
+  /* フォント（UDフォント重視） */
+  --font-udp: 'BIZ UDPGothic', 'BIZ UDGothic', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', sans-serif;
+  --font-mplus: 'M PLUS 1p', 'Kosugi Maru', sans-serif;
+  --font-body: var(--font-udp);
+  --font-display: var(--font-mplus);
+
+  /* フォントサイズ（小学生が見やすいよう大きめに設計） */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1.0625rem;/* 17px */
+  --text-md: 1.25rem;    /* 20px */
+  --text-lg: 1.5rem;     /* 24px */
+  --text-xl: 1.875rem;   /* 30px */
+  --text-2xl: 2.25rem;   /* 36px */
+  --text-3xl: 3rem;      /* 48px */
+
+  /* 余白 */
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+
+  /* タップ領域（スマホ操作で押し間違いを防ぐ最低高） */
+  --tap-min: 52px;
+
+  /* トランジション */
+  --dur-short: 150ms;
+  --dur-base: 250ms;
+  --dur-long: 400ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+}

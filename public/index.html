@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>算数かさ・容量（L・dL・mL）| 小学生の算数体験学習＆プリント作成</title>
+  <meta name="description" content="小学2〜3年生向け 算数「水のかさ・容量（リットル・デシリットル・ミリリットル）」の動的シミュレーター学習とA4プリント自動作成Webアプリ。">
+  <meta name="theme-color" content="#0284c7">
+
+  <!-- PWA & アイコン -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+
+  <!-- Google Fonts: BIZ UDPGothic (教科書・教育用UDフォント), M PLUS 1p -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=M+PLUS+1p:wght@500;800;900&display=swap" rel="stylesheet">
+
+  <!-- スタイルシート -->
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="print.css">
+</head>
+<body>
+  <!-- トップバーナビゲーション -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand-link" href="#home">
+        <img class="brand-icon" src="icons/icon.svg" alt="かさ・容量 アイコン" width="38" height="38">
+        <div>
+          <span class="brand-text-sub">小学生の算数</span>
+          <span>かさ・容量</span>
+        </div>
+      </a>
+
+      <nav class="nav-links" aria-label="メインメニュー">
+        <a href="#home" class="nav-item" data-nav="home">
+          <span>🏠</span><span class="nav-text">ホーム</span>
+        </a>
+        <a href="#learn" class="nav-item" data-nav="learn">
+          <span>🧪</span><span class="nav-text">まなぶ</span>
+        </a>
+        <a href="#practice" class="nav-item" data-nav="practice">
+          <span>✏️</span><span class="nav-text">れんしゅう</span>
+        </a>
+        <a href="#print" class="nav-item" data-nav="print">
+          <span>🖨️</span><span class="nav-text">プリント</span>
+        </a>
+        <a href="#settings" class="nav-item" data-nav="settings">
+          <span>⚙️</span><span class="nav-text">せってい</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- メイン画面ルート -->
+  <main id="app" class="app-layout"></main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

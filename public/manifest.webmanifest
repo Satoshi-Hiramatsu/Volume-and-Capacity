@@ -1,0 +1,14 @@
+{
+  "name": "算数かさ・容量 (L・dL・mL)",
+  "short_name": "かさ・容量",
+  "description": "小学2・3年生向け 算数「水のかさ・容量」（L・dL・mL）の体験学習・プリント作成アプリ",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f0fdf4",
+  "theme_color": "#0284c7",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

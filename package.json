@@ -1,0 +1,26 @@
+{
+  "name": "volume-and-capacity",
+  "version": "1.0.0",
+  "description": "小学2・3年生向け 算数「水のかさ・容量」（L・dL・mL）の体験学習・プリント作成アプリ（Cloudflare Workers / Static Assets）",
+  "private": true,
+  "type": "module",
+  "main": "src/worker.js",
+  "scripts": {
+    "start": "wrangler dev",
+    "dev": "wrangler dev",
+    "serve": "node serve.cjs",
+    "deploy": "wrangler deploy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Satoshi-Hiramatsu/Volume-and-Capacity.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "author": "Satoshi Hiramatsu",
+  "license": "ISC",
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

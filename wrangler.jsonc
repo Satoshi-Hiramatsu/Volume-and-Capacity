@@ -1,0 +1,14 @@
+{
+  "name": "volume-and-capacity",
+  "main": "src/worker.js",
+  "routes": [
+    { "pattern": "volume-and-capacity.molkz.com", "custom_domain": true }
+  ],
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "not_found_handling": "none",
+    "run_worker_first": ["/api/*"]
+  }
+}
