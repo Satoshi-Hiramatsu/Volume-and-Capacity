@@ -113,6 +113,11 @@
   user-select: none;
 }
 
+/* 固定バー用の短縮ラベル（通常時は非表示） */
+.action-label-short {
+  display: none;
+}
+
 .btn-print-action--generate {
   background: linear-gradient(135deg, #0ea5e9, #0284c7);
   color: #fff;
@@ -169,8 +174,6 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  transform-origin: top center;
-  transition: transform 0.2s ease;
 }
 
 /* A4 Sheet 1枚の規格レイアウト */
@@ -375,6 +378,62 @@
   }
 }
 
+/* ==========================================================================
+   スマホ・タブレット：「再生成」「印刷 / PDF」を画面下部に固定
+   縦持ちの幅に加えて、横持ち（画面が低い小型端末）とタッチ端末も同じ扱いにする
+   ========================================================================== */
+@media screen and (max-width: 1024px),
+       screen and (max-width: 950px) and (max-height: 480px) and (orientation: landscape),
+       screen and (pointer: coarse) and (max-width: 100rem) {
+  /* 固定バーの分だけ本文の下に余白を確保する */
+  .print-view {
+    padding-bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* プレビューの内側スクロールが固定バーに隠れないように高さを詰める */
+  .print-preview-area {
+    max-height: calc(85vh - 5rem);
+  }
+
+  .print-form > .print-actions {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 120;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 10px;
+    margin: 0;
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
+    /* 幅の広い端末では本文（最大 1160px）と左右の位置をそろえる */
+    padding-inline: max(12px, calc((100% - 1160px) / 2));
+    background: var(--c-surface);
+    border-top: 2px solid var(--c-rule-soft);
+    box-shadow: 0 -2px 12px rgba(15, 23, 42, 0.18);
+  }
+
+  .print-form > .print-actions .btn-print-action {
+    min-height: var(--tap-min);
+    padding: 0 10px;
+    font-size: var(--text-sm);
+    box-shadow: none;
+    white-space: nowrap;
+  }
+
+  .print-form > .print-actions .btn-print-action:active {
+    transform: none;
+  }
+
+  .print-form > .print-actions .action-label-long {
+    display: none;
+  }
+
+  .print-form > .print-actions .action-label-short {
+    display: inline;
+  }
+}
+
 /* ===== 印刷ダイアログ実行時のスタイル ===== */
 @page {
   size: A4 portrait;
@@ -418,6 +477,7 @@
   }
 
   .sheets-container {
+    zoom: 1 !important;
     transform: none !important;
     gap: 0 !important;
   }

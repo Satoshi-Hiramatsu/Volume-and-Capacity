@@ -1,5 +1,5 @@
 // Service Worker for offline capability
-const CACHE_NAME = 'kasa-capacity-v1';
+const CACHE_NAME = 'kasa-capacity-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

@@ -594,9 +594,27 @@ rt {
 @media (max-width: 860px) {
   .topbar-inner {
     padding: 6px 10px;
+    gap: 8px;
   }
   .brand-text-sub {
     display: none;
+  }
+  /* ロゴ名が2〜3行に折り返さないようにする */
+  .brand-link {
+    flex-shrink: 0;
+    gap: 8px;
+    font-size: var(--text-md);
+  }
+  .brand-link > div {
+    white-space: nowrap;
+  }
+  .brand-icon {
+    width: 30px;
+    height: 30px;
+  }
+  .nav-links {
+    gap: 2px;
+    min-width: 0;
   }
   .nav-item span.nav-text {
     display: none;

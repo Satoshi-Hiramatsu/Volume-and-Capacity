@@ -4,6 +4,16 @@ import { randomSeed } from '../lib/rng.js';
 import { playSound } from '../lib/sound.js';
 
 const COUNTS = [6, 8, 10];
+const A4_WIDTH_PX = 794; // A4縦 210mm ≒ 794px (96dpi)
+
+// 画面幅にプレビューが収まる初期倍率を選ぶ（狭い画面では自動で縮小）
+function initialZoom() {
+  const width = typeof window === 'undefined' ? 1440 : window.innerWidth;
+  if (width >= 1100) return 0.65;
+  const fitted = (width - 56) / A4_WIDTH_PX;
+  return Math.max(0.35, Math.min(0.65, Math.floor(fitted * 20) / 20));
+}
+
 const OUTPUTS = {
   both: '問題 ＋ 解答',
   q: '問題のみ',
@@ -22,7 +32,7 @@ export function renderPrint(root, { settings, params }) {
     count,
     out,
     seed: rawSeed,
-    zoom: 0.65 // デフォルトプレビュースケール
+    zoom: initialZoom() // プレビュー表示倍率（狭い画面では画面幅に合わせる）
   };
 
   if (state.patterns.length === 0) {
@@ -99,10 +109,12 @@ export function renderPrint(root, { settings, params }) {
           <!-- アクションボタン -->
           <div class="print-actions">
             <button type="button" id="btnGenerateNew" class="btn-print-action btn-print-action--generate">
-              🔄 べつの問題を作る（再生成）
+              <span class="action-label-long">🔄 べつの問題を作る（再生成）</span>
+              <span class="action-label-short">🔄 べつの問題</span>
             </button>
             <button type="button" id="btnPrintNow" class="btn-print-action btn-print-action--print">
-              🖨️ 印刷する / PDF保存
+              <span class="action-label-long">🖨️ 印刷する / PDF保存</span>
+              <span class="action-label-short">🖨️ 印刷 / PDF</span>
             </button>
           </div>
 
@@ -121,7 +133,7 @@ export function renderPrint(root, { settings, params }) {
             <button type="button" class="btn btn-outline" id="btnZoomIn" style="min-height: 28px; padding: 0 8px; font-size: 13px;">拡大 (＋)</button>
           </div>
 
-          <div class="sheets-container" id="sheetsContainer" style="transform: scale(${state.zoom});">
+          <div class="sheets-container" id="sheetsContainer" style="zoom: ${state.zoom};">
             ${(state.out === 'both' || state.out === 'q') ? renderSheetHtml(set, false) : ''}
             ${(state.out === 'both' || state.out === 'a') ? renderSheetHtml(set, true) : ''}
           </div>
@@ -268,12 +280,12 @@ export function renderPrint(root, { settings, params }) {
     if (zoomIn && zoomOut) {
       zoomIn.addEventListener('click', () => {
         state.zoom = Math.min(1.0, state.zoom + 0.1);
-        if (container) container.style.transform = `scale(${state.zoom})`;
+        if (container) container.style.zoom = state.zoom;
         if (zoomLabel) zoomLabel.textContent = `${Math.round(state.zoom * 100)}%`;
       });
       zoomOut.addEventListener('click', () => {
         state.zoom = Math.max(0.35, state.zoom - 0.1);
-        if (container) container.style.transform = `scale(${state.zoom})`;
+        if (container) container.style.zoom = state.zoom;
         if (zoomLabel) zoomLabel.textContent = `${Math.round(state.zoom * 100)}%`;
       });
     }
