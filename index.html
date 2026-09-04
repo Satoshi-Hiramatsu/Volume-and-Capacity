@@ -1,0 +1,2261 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カサの単位へんしんマシーン | 小学生の算数</title>
+
+    <!-- Google Fonts: Kosugi Maru (丸文字で子供に見やすいフォント) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-light: #e0f2fe;
+            --accent: #f97316;
+            --accent-light: #ffedd5;
+            --bg-color: #f0fdf4; /* 優しいパステルグリーン */
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --font-family: 'Kosugi Maru', 'Helvetica Neue', Arial, sans-serif;
+            --shadow-sm: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+            --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-family);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* アプリ全体のコンテナ */
+        .app-container {
+            width: 100%;
+            max-width: 1000px;
+            background: var(--card-bg);
+            border-radius: 32px;
+            box-shadow: var(--shadow-lg);
+            padding: 30px;
+            border: 8px solid #bbf7d0; /* パステルグリーンのふち */
+            position: relative;
+            margin-top: 10px;
+        }
+
+        /* ヘッダー */
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .title-badge {
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            color: white;
+            padding: 10px 30px;
+            border-radius: 50px;
+            display: inline-block;
+            font-size: 26px;
+            font-weight: bold;
+            box-shadow: var(--shadow-md);
+            border: 4px solid #ffffff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* キャラクターエリア */
+        .char-guide-box {
+            display: flex;
+            align-items: center;
+            background: #fef9c3; /* やさしい黄色 */
+            border: 3px dashed #facc15;
+            border-radius: 20px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            position: relative;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .char-img-container {
+            width: 70px;
+            height: 70px;
+            background: #ffffff;
+            border-radius: 50%;
+            border: 3px solid #facc15;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .char-bubble {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #7c2d12;
+            flex-grow: 1;
+        }
+
+        /* メイングリッド構造 */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* パネル共通 */
+        .panel {
+            background: #f8fafc;
+            border-radius: 24px;
+            padding: 20px;
+            border: 3px solid #e2e8f0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .panel-title {
+            font-size: 18px;
+            color: var(--primary);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 3px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+
+        .panel-title-num {
+            background: var(--primary);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        /* 数字選択エリア */
+        .num-hint {
+            font-size: 13px;
+            color: #ea580c;
+            font-weight: bold;
+            margin-top: 6px;
+            min-height: 18px;
+        }
+
+        .num-selector {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .num-btn .num-unit {
+            font-size: 0.6em;
+            color: #94a3b8;
+            margin-left: 1px;
+            font-weight: bold;
+        }
+
+        .num-btn.active .num-unit {
+            color: #b45309;
+        }
+
+        .num-btn {
+            background: #ffffff;
+            border: 3px solid #cbd5e1;
+            border-radius: 16px;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 10px 0;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 0 #cbd5e1;
+        }
+
+        .num-btn:hover {
+            transform: translateY(-2px);
+            border-color: #94a3b8;
+            box-shadow: 0 6px 0 #94a3b8;
+        }
+
+        .num-btn.active {
+            background: #fbbf24; /* はじけるイエロー */
+            border-color: #d97706;
+            color: #7c2d12;
+            box-shadow: 0 4px 0 #d97706;
+            transform: scale(1.1) translateY(-2px);
+        }
+
+        .num-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #d97706;
+        }
+
+        /* 単位選択カード */
+        .unit-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .unit-card {
+            background: white;
+            border: 3px solid #cbd5e1;
+            border-radius: 20px;
+            padding: 12px 5px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 0 #cbd5e1;
+        }
+
+        .unit-card svg {
+            width: 45px;
+            height: 45px;
+            transition: transform 0.2s ease;
+        }
+
+        .unit-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #cbd5e1;
+        }
+
+        .unit-card:hover svg {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .unit-card.active {
+            border-color: #38bdf8;
+            background: #f0f9ff;
+            box-shadow: 0 4px 0 #0284c7;
+        }
+
+        .unit-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #475569;
+        }
+
+        .unit-card.active .unit-name {
+            color: #0369a1;
+        }
+
+        .unit-desc {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        /* へんしんボタンエリア */
+        .transform-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .transform-btn {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 15px 20px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #c2410c, var(--shadow-sm);
+            transition: all 0.15s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .transform-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -50%;
+            width: 30%;
+            height: 100%;
+            background: rgba(255,255,255,0.3);
+            transform: skewX(-25deg);
+            transition: 0.75s;
+        }
+
+        .transform-btn:hover::before {
+            left: 150%;
+        }
+
+        .transform-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 #c2410c, var(--shadow-md);
+        }
+
+        .transform-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #c2410c;
+        }
+
+        .transform-btn:disabled {
+            background: #cbd5e1;
+            color: #94a3b8;
+            box-shadow: 0 4px 0 #94a3b8;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* 右側：ディスプレイ＆グラフィック */
+        .display-panel {
+            background: #0f172a; /* ダークネイビー */
+            border-radius: 24px;
+            padding: 20px;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 130px;
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.5), var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+            border: 4px solid #334155;
+        }
+
+        .display-label {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .display-value {
+            font-size: 40px;
+            font-weight: bold;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            letter-spacing: 1px;
+        }
+
+        .number-part {
+            color: #f8fafc;
+            transition: all 0.3s ease;
+        }
+
+        .unit-part {
+            color: #38bdf8;
+            font-size: 26px;
+            margin-left: 8px;
+        }
+
+        .highlight-zero {
+            color: #facc15; /* ピカピカイエロー */
+            display: inline-block;
+            animation: pop-n-shine 0.6s ease-out;
+            font-weight: 900;
+        }
+
+        @keyframes pop-n-shine {
+            0% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.4); filter: brightness(1.5); color: #ffffff; }
+            100% { transform: scale(1); filter: brightness(1); }
+        }
+
+        .removed-zero {
+            color: #ef4444; /* レッド */
+            text-decoration: line-through;
+            display: inline-block;
+            animation: shrink-n-fade 0.6s forwards;
+        }
+
+        @keyframes shrink-n-fade {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2) rotate(15deg); color: #ef4444; }
+            100% { transform: scale(0); opacity: 0; width: 0; overflow: hidden; margin: 0; }
+        }
+
+        /* 0の引き出しエリア */
+        .drawer-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            height: 90px;
+            position: relative;
+        }
+
+        .drawer-box {
+            width: 120px;
+            height: 60px;
+            background: #b45309; /* 木製の引き出し */
+            border-radius: 12px;
+            position: relative;
+            border: 4px solid #78350f;
+            box-shadow: var(--shadow-md);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .drawer-box:hover {
+            transform: scale(1.05);
+        }
+
+        /* 引き出しの前面（開く部分） */
+        .drawer-front {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #d97706;
+            border-radius: 8px;
+            border: 2px solid #f59e0b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
+            z-index: 2;
+        }
+
+        .drawer-handle {
+            width: 25px;
+            height: 12px;
+            background: #e2e8f0;
+            border: 2px solid #94a3b8;
+            border-radius: 6px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* 引き出しが開いた状態 */
+        .drawer-box.open .drawer-front {
+            transform: translateZ(0) translateY(12px) scaleY(0.8);
+            background: #b45309;
+        }
+
+        /* ひきだしの中の穴 */
+        .drawer-hole {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: calc(100% - 8px);
+            height: calc(100% - 8px);
+            background: #451a03;
+            border-radius: 6px;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fbbf24;
+            font-size: 22px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .drawer-box.open .drawer-hole {
+            opacity: 1;
+        }
+
+        /* 飛び出す0のアニメーション用要素 */
+        .flying-zero {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            background: #fbbf24;
+            color: #7c2d12;
+            border: 3px solid #d97706;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        /* ビジュアル表示エリア */
+        .visual-area {
+            background: #eff6ff; /* 青空 */
+            border-radius: 24px;
+            border: 3px dashed #93c5fd;
+            padding: 20px;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .visual-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            align-items: flex-end;
+            width: 100%;
+        }
+
+        /* L: 牛乳パックのスタイリング */
+        .milk-pack-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            animation: pop-in 0.3s ease-out forwards;
+        }
+
+        .milk-pack-svg {
+            width: 65px;
+            height: 110px;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+
+        /* dL: コップのトレーとコップ */
+        .dl-tray {
+            background: #edd1b0; /* 木のトレー */
+            border: 3px solid #b27a51;
+            border-radius: 16px;
+            padding: 10px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            box-shadow: 0 6px 0 #b27a51, var(--shadow-sm);
+            margin: 5px;
+            animation: pop-in 0.4s ease-out forwards;
+            position: relative;
+        }
+
+        .dl-tray-label {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #f97316;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 10px;
+            border: 2px solid white;
+            box-shadow: var(--shadow-sm);
+            white-space: nowrap;
+        }
+
+        .cup-svg {
+            width: 32px;
+            height: 42px;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
+            animation: cup-appear 0.2s ease-out forwards;
+        }
+
+        /* mL: メスシリンダー */
+        .cylinder-wrapper {
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            animation: pop-in 0.4s ease-out forwards;
+            position: relative;
+        }
+
+        .cylinder-svg-container {
+            position: relative;
+            width: 110px;
+            height: 230px;
+        }
+
+        .cylinder-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+        }
+
+        /* しずくシャワーのアニメーション */
+        .drip-shower-container {
+            position: absolute;
+            top: 40px;
+            left: 38px;
+            width: 64px;
+            height: 130px;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .drip-particle {
+            position: absolute;
+            width: 4px;
+            height: 8px;
+            background: #60a5fa;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: drip-fall 0.6s linear infinite;
+        }
+
+        @keyframes drip-fall {
+            0% { transform: translateY(-10px); opacity: 0; }
+            30% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(110px); opacity: 0; }
+        }
+
+        /* 単位変換の補助メーター */
+        .cylinder-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: white;
+            border: 2px solid #bfdbfe;
+            padding: 12px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .cylinder-info-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #1d4ed8;
+            border-bottom: 2px solid #eff6ff;
+            padding-bottom: 4px;
+        }
+
+        .cylinder-info-row {
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        @keyframes pop-in {
+            0% { transform: scale(0.7); opacity: 0; }
+            80% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes cup-appear {
+            0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0); opacity: 1; }
+        }
+
+        /* SVGウェーブアニメーション（中の水が揺れる） */
+        .liquid-wave {
+            animation: wave 3s ease-in-out infinite alternate;
+            transform-origin: bottom center;
+        }
+
+        @keyframes wave {
+            0% { transform: rotate(-1.5deg) skewX(-1.5deg); }
+            100% { transform: rotate(1.5deg) skewX(1.5deg); }
+        }
+
+        /* 下部クレジット/ボタン */
+        footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 13px;
+            color: #64748b;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toggle-sound-btn {
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin: 0 auto;
+            color: #475569;
+            transition: all 0.2s;
+        }
+
+        .toggle-sound-btn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        /* キャラクター吹き出しのしっぽ */
+        .char-guide-box::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50px;
+            border-width: 15px 15px 0;
+            border-style: solid;
+            border-color: #fef9c3 transparent;
+            display: block;
+            width: 0;
+        }
+
+        .char-guide-box::before {
+            content: '';
+            position: absolute;
+            bottom: -19px;
+            left: 48px;
+            border-width: 17px 17px 0;
+            border-style: solid;
+            border-color: #facc15 transparent;
+            display: block;
+            width: 0;
+        }
+
+        /* 紙吹雪エフェクト用 */
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999;
+            animation: fall 1.5s ease-out forwards;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(150px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* ===== モード切り替えタブ ===== */
+        .tab-bar {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background: #fff;
+            border: 3px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 10px 18px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #475569;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #cbd5e1;
+            transition: all 0.15s ease;
+            font-family: var(--font-family);
+        }
+
+        .tab-btn:hover { transform: translateY(-2px); }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: #0369a1;
+            box-shadow: 0 4px 0 #0369a1;
+        }
+
+        .mode-view { display: none; }
+        .mode-view.active { display: block; animation: fadein 0.3s ease; }
+
+        @keyframes fadein {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: none; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+
+        .mode-intro {
+            background: #fef9c3;
+            border: 3px dashed #facc15;
+            border-radius: 16px;
+            padding: 12px 16px;
+            font-size: 15px;
+            font-weight: bold;
+            color: #854d0e;
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        /* ===== 単位カラム / ステッパー ===== */
+        .build-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .unit-col {
+            background: #f8fafc;
+            border: 3px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 14px 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .unit-col-head {
+            font-size: 18px;
+            font-weight: bold;
+            padding: 4px 16px;
+            border-radius: 12px;
+            color: #fff;
+        }
+        .unit-col-head.L  { background: #2563eb; }
+        .unit-col-head.dL { background: #f97316; }
+        .unit-col-head.mL { background: #0891b2; }
+
+        .stepper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 22px;
+            font-weight: bold;
+            color: #fff;
+            font-family: var(--font-family);
+            box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+            transition: transform 0.1s ease;
+            line-height: 1;
+        }
+        .step-btn.minus { background: #f87171; }
+        .step-btn.plus  { background: #34d399; }
+        .step-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.2); }
+
+        .stepper-val {
+            min-width: 64px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #1e293b;
+        }
+        .stepper-val small { font-size: 14px; color: #94a3b8; margin-left: 2px; }
+
+        .unit-tag {
+            font-weight: bold;
+            min-width: 36px;
+            text-align: center;
+            color: #fff;
+            border-radius: 8px;
+            padding: 2px 0;
+            font-size: 14px;
+        }
+        .unit-tag.L  { background: #2563eb; }
+        .unit-tag.dL { background: #f97316; }
+        .unit-tag.mL { background: #0891b2; }
+
+        /* ===== 合計バナー ===== */
+        .total-banner {
+            margin: 18px 0;
+            background: #0f172a;
+            color: #fff;
+            border-radius: 18px;
+            padding: 14px 18px;
+            text-align: center;
+            font-size: 20px;
+        }
+        .total-banner strong { color: #fbbf24; }
+        .total-sub { display: block; font-size: 14px; color: #94a3b8; margin-top: 4px; }
+
+        /* ===== フラットイラストエリア ===== */
+        .ill-area {
+            background: #eff6ff;
+            border: 3px dashed #93c5fd;
+            border-radius: 20px;
+            padding: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            justify-content: center;
+            align-items: flex-end;
+            min-height: 180px;
+        }
+        .ill-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .ill-group-title { font-size: 14px; font-weight: bold; color: #1e3a8a; }
+        .ill-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            align-items: flex-end;
+            max-width: 340px;
+        }
+        .ill-cap { font-size: 11px; color: #64748b; }
+        .ill-empty { color: #94a3b8; font-weight: bold; padding: 30px; }
+        .ill-carton { width: 46px; height: 74px; }
+        .ill-cup { width: 40px; height: 60px; }
+        .ill-beaker { width: 90px; height: 170px; }
+
+        /* ===== たしざん / ひきざん ===== */
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 12px;
+            align-items: stretch;
+        }
+        .calc-sign { font-size: 40px; font-weight: bold; color: var(--primary); display: flex; align-items: center; justify-content: center; }
+
+        .operand {
+            background: #f8fafc;
+            border: 3px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+        .operand-title {
+            background: var(--accent);
+            color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .operand-val { font-size: 22px; font-weight: bold; color: #1e293b; }
+        .operand-steppers { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+        .operand-steppers .stepper { justify-content: space-between; }
+        .operand-ill {
+            background: #eff6ff;
+            border-radius: 14px;
+            padding: 8px;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            align-items: flex-end;
+            min-height: 90px;
+        }
+        .operand-ill .ill-beaker { width: 56px; height: 110px; }
+        .operand-ill .ill-carton { width: 32px; height: 52px; }
+        .operand-ill .ill-cup { width: 28px; height: 44px; }
+        .operand-ill .ill-group-title, .operand-ill .ill-cap { display: none; }
+        .operand-ill .ill-group { gap: 2px; }
+
+        .calc-btn {
+            display: block;
+            margin: 18px auto;
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: #fff;
+            border: none;
+            border-radius: 18px;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 14px 34px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #c2410c;
+            font-family: var(--font-family);
+            transition: all 0.15s ease;
+        }
+        .calc-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 0 #c2410c; }
+        .calc-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #c2410c; }
+
+        .result-banner {
+            background: #0f172a;
+            color: #fff;
+            border-radius: 18px;
+            padding: 16px;
+            text-align: center;
+            margin-bottom: 14px;
+            animation: pop-in 0.4s ease-out;
+        }
+        .result-eq { font-size: 22px; }
+        .result-eq strong { color: #fbbf24; }
+        .result-sub { font-size: 13px; color: #94a3b8; margin-top: 6px; }
+        .result-note { font-size: 13px; color: #4ade80; margin-top: 6px; font-weight: bold; }
+        .result-ill-title { font-weight: bold; color: #1e3a8a; margin-bottom: 8px; text-align: center; }
+        .result-error {
+            background: #fee2e2;
+            border: 3px solid #fca5a5;
+            color: #b91c1c;
+            font-weight: bold;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            animation: pop-in 0.4s ease-out;
+        }
+
+        @media (max-width: 680px) {
+            .calc-grid { grid-template-columns: 1fr; }
+            .calc-sign { padding: 4px 0; }
+            .build-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <header>
+        <div class="title-badge">カサの たんいマシーン</div>
+    </header>
+
+    <!-- モード切り替えタブ -->
+    <div class="tab-bar">
+        <button class="tab-btn active" id="tab-henshin" onclick="showMode('henshin')">🔁 へんしん</button>
+        <button class="tab-btn" id="tab-tsukuru" onclick="showMode('tsukuru')">🧪 かずをつくる</button>
+        <button class="tab-btn" id="tab-tashizan" onclick="showMode('tashizan')">➕ たしざん</button>
+        <button class="tab-btn" id="tab-hikizan" onclick="showMode('hikizan')">➖ ひきざん</button>
+    </div>
+
+    <!-- ===== モード①：単位へんしん ===== -->
+    <div id="mode-henshin" class="mode-view active">
+
+    <!-- キャラクターアドバイス -->
+    <div class="char-guide-box" id="guideBox">
+        <div class="char-img-container">
+            <!-- カサくん (かわいい水滴のキャラクターをSVGで描画) -->
+            <svg viewBox="0 0 100 100" width="100%" height="100%">
+                <!-- 体 (水滴) -->
+                <path d="M50 15 C30 45 20 60 20 75 A30 30 0 0 0 80 75 C80 60 70 45 50 15 Z" fill="#38bdf8"/>
+                <!-- お腹のハイライト -->
+                <path d="M50 25 C37 47 30 58 30 72 A20 20 0 0 0 70 72 C70 58 63 47 50 25 Z" fill="#7dd3fc" opacity="0.6"/>
+                <!-- 目 -->
+                <circle cx="42" cy="65" r="5" fill="#0f172a"/>
+                <circle cx="58" cy="65" r="5" fill="#0f172a"/>
+                <!-- 目のハイライト -->
+                <circle cx="40" cy="63" r="1.5" fill="#ffffff"/>
+                <circle cx="56" cy="63" r="1.5" fill="#ffffff"/>
+                <!-- ほっぺ -->
+                <circle cx="35" cy="70" r="4" fill="#fb7185"/>
+                <circle cx="65" cy="70" r="4" fill="#fb7185"/>
+                <!-- 口 -->
+                <path d="M47 72 Q50 75 53 72" stroke="#0f172a" stroke-width="3" fill="none" stroke-linecap="round" id="char-mouth"/>
+            </svg>
+        </div>
+        <div class="char-bubble" id="charBubble">
+            ぼくは、カサの妖精「カサくん」だよ！<br>
+            ①でカサのたんい、②ですうじを選んで、③のへんしんボタンを押してみよう！
+        </div>
+    </div>
+
+    <!-- メインの操作ビジュアル -->
+    <div class="main-grid">
+
+        <!-- 左パネル: 設定とアクション -->
+        <div class="panel">
+            <!-- 1. カサの単位 -->
+            <div>
+                <div class="panel-title">
+                    <div class="panel-title-num">1</div>
+                    カサの たんいを えらぼう！
+                </div>
+                <div style="margin-top: 12px;">
+                    <div class="unit-cards">
+                        <!-- L カード -->
+                        <div class="unit-card active" id="card-L" onclick="selectUnit('L')">
+                            <!-- 牛乳パック風SVG -->
+                            <svg viewBox="0 0 60 90">
+                                <path d="M10 30 L30 15 L50 30 L50 85 L10 85 Z" fill="#e0f2fe" stroke="#0284c7" stroke-width="3"/>
+                                <path d="M10 30 L50 30" stroke="#0284c7" stroke-width="3"/>
+                                <path d="M30 15 L30 30" stroke="#0284c7" stroke-width="3"/>
+                                <rect x="18" y="40" width="24" height="30" rx="3" fill="#38bdf8"/>
+                                <text x="30" y="60" fill="white" font-size="16" font-weight="bold" text-anchor="middle">L</text>
+                            </svg>
+                            <span class="unit-name">L (リットル)</span>
+                            <span class="unit-desc">いちばん大きいボス</span>
+                        </div>
+
+                        <!-- dL カード -->
+                        <div class="unit-card" id="card-dL" onclick="selectUnit('dL')">
+                            <!-- コップ風SVG -->
+                            <svg viewBox="0 0 60 90">
+                                <path d="M15 25 L45 25 L40 80 L20 80 Z" fill="#ffedd5" stroke="#f97316" stroke-width="3" stroke-linejoin="round"/>
+                                <rect x="22" y="38" width="16" height="25" rx="3" fill="#fb923c"/>
+                                <text x="30" y="56" fill="white" font-size="12" font-weight="bold" text-anchor="middle">dL</text>
+                            </svg>
+                            <span class="unit-name">dL (デシリットル)</span>
+                            <span class="unit-desc">まぼろしのコップ</span>
+                        </div>
+
+                        <!-- mL カード -->
+                        <div class="unit-card" id="card-mL" onclick="selectUnit('mL')">
+                            <!-- しずく風SVG -->
+                            <svg viewBox="0 0 60 90">
+                                <path d="M30 15 C15 50 10 60 10 72 A20 20 0 0 0 50 72 C50 60 45 50 30 15 Z" fill="#dbeafe" stroke="#2563eb" stroke-width="3"/>
+                                <circle cx="30" cy="65" r="8" fill="#3b82f6"/>
+                                <text x="30" y="69" fill="white" font-size="10" font-weight="bold" text-anchor="middle">mL</text>
+                            </svg>
+                            <span class="unit-name">mL (ミリリットル)</span>
+                            <span class="unit-desc">ちいさなしずく</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 数字選択 -->
+            <div>
+                <div class="panel-title">
+                    <div class="panel-title-num">2</div>
+                    すうじ（かさ）を えらぼう！
+                </div>
+                <div class="num-hint" id="numHint"></div>
+                <div style="margin-top: 12px;">
+                    <div class="num-selector" id="numSelector">
+                        <!-- JSで単位に合わせたボタンを描画 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. へんしんボタン -->
+            <div>
+                <div class="panel-title">
+                    <div class="panel-title-num">3</div>
+                    べつの たんいに へんしん！
+                </div>
+                <div class="transform-actions" id="transformActions">
+                    <!-- JSで動的にボタンを描画 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 右パネル: ディスプレイとビジュアル -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+
+            <!-- へんしんディスプレイ -->
+            <div class="display-panel" id="displayPanel">
+                <div class="display-label">へんしんディスプレイ</div>
+                <div class="display-value" id="displayValue">
+                    <span class="number-part" id="dispNum">3</span>
+                    <span class="unit-part" id="dispUnit">L</span>
+                </div>
+
+                <!-- 0の引き出し -->
+                <div class="drawer-area">
+                    <div style="font-size: 13px; color: #94a3b8; text-align: right;">0の<br>ひきだし</div>
+                    <div class="drawer-box" id="zeroDrawer" onclick="toggleDrawer()">
+                        <div class="drawer-front">
+                            <div class="drawer-handle"></div>
+                        </div>
+                        <div class="drawer-hole" id="drawerHole">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ビジュアル表現エリア -->
+            <div class="visual-area">
+                <div style="font-size: 14px; font-weight: bold; color: #1e3a8a; align-self: flex-start;">カサのようす！</div>
+                <div class="visual-container" id="visualContainer">
+                    <!-- SVGグラフィックがここに並びます -->
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    </div><!-- /mode-henshin -->
+
+    <!-- ===== モード②：かずをつくる（複数単位） ===== -->
+    <div id="mode-tsukuru" class="mode-view"></div>
+
+    <!-- ===== モード③：たしざん ===== -->
+    <div id="mode-tashizan" class="mode-view"></div>
+
+    <!-- ===== モード④：ひきざん ===== -->
+    <div id="mode-hikizan" class="mode-view"></div>
+
+    <!-- 下部エリア -->
+    <footer>
+        <button class="toggle-sound-btn" onclick="toggleSound()">
+            <span id="sound-icon">🔊</span> <span id="sound-text">おと：ON</span>
+        </button>
+        <div>小学2年生 算数「カサと容量」学習用ツール</div>
+    </footer>
+</div>
+
+<script>
+    // --- アプリの状態管理 ---
+    // 単位ごとに「つかうすうじ」を用意する。
+    // mL は 1mL のようにごく小さい数は学習で使わないので、100ずつにする。
+    const NUMBER_SETS = {
+        'L':  [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        'dL': [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        'mL': [100, 200, 300, 400, 500, 600, 700, 800, 900]
+    };
+
+    let currentUnit = 'L';
+    let currentDigit = 3;                 // 1〜9（えらんでいる「位置」）
+    let currentNumber = NUMBER_SETS[currentUnit][currentDigit - 1];
+    let targetUnit = null;
+    let isSoundOn = true;
+    let isDrawerOpen = false;
+
+    // --- 効果音作成（Web Audio API） ---
+    let audioCtx = null;
+
+    function initAudio() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+    }
+
+    function playSound(type) {
+        if (!isSoundOn) return;
+        initAudio();
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        const now = audioCtx.currentTime;
+
+        if (type === 'select') {
+            // ピッと短い選定音
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, now);
+            osc.frequency.exponentialRampToValueAtTime(900, now + 0.08);
+            gainNode.gain.setValueAtTime(0.1, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+            osc.start(now);
+            osc.stop(now + 0.08);
+        } else if (type === 'transform') {
+            // ピコピコピコーン♪と楽しいキラキラ音 (アルペジオ)
+            const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+            notes.forEach((freq, index) => {
+                const noteOsc = audioCtx.createOscillator();
+                const noteGain = audioCtx.createGain();
+                noteOsc.connect(noteGain);
+                noteGain.connect(audioCtx.destination);
+
+                noteOsc.type = 'triangle';
+                noteOsc.frequency.setValueAtTime(freq, now + index * 0.07);
+                noteGain.gain.setValueAtTime(0.1, now + index * 0.07);
+                noteGain.gain.exponentialRampToValueAtTime(0.01, now + index * 0.07 + 0.15);
+
+                noteOsc.start(now + index * 0.07);
+                noteOsc.stop(now + index * 0.07 + 0.15);
+            });
+        } else if (type === 'cleanup') {
+            // シュッと消えるノイズ音
+            const bufferSize = audioCtx.sampleRate * 0.25; // 0.25秒
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1;
+            }
+
+            const noiseNode = audioCtx.createBufferSource();
+            noiseNode.buffer = buffer;
+
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.setValueAtTime(1000, now);
+            filter.frequency.exponentialRampToValueAtTime(100, now + 0.2);
+
+            const noiseGain = audioCtx.createGain();
+            noiseGain.gain.setValueAtTime(0.2, now);
+            noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+
+            noiseNode.connect(filter);
+            filter.connect(noiseGain);
+            noiseGain.connect(audioCtx.destination);
+
+            noiseNode.start(now);
+            noiseNode.stop(now + 0.25);
+        } else if (type === 'error') {
+            // ブブーという低音
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(180, now);
+            gainNode.gain.setValueAtTime(0.1, now);
+            gainNode.gain.setValueAtTime(0.1, now + 0.1);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+            osc.start(now);
+            osc.stop(now + 0.15);
+
+            // 2回鳴らす
+            setTimeout(() => {
+                if (!isSoundOn) return;
+                const osc2 = audioCtx.createOscillator();
+                const gainNode2 = audioCtx.createGain();
+                osc2.connect(gainNode2);
+                gainNode2.connect(audioCtx.destination);
+                osc2.type = 'sawtooth';
+                osc2.frequency.setValueAtTime(180, audioCtx.currentTime);
+                gainNode2.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode2.gain.setValueAtTime(0.1, audioCtx.currentTime + 0.1);
+                gainNode2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                osc2.start(audioCtx.currentTime);
+                osc2.stop(audioCtx.currentTime + 0.15);
+            }, 180);
+        } else if (type === 'drawer') {
+            // カチャッという引き出し開閉音
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(300, now);
+            osc.frequency.exponentialRampToValueAtTime(150, now + 0.1);
+            gainNode.gain.setValueAtTime(0.08, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+            osc.start(now);
+            osc.stop(now + 0.1);
+        }
+    }
+
+    function toggleSound() {
+        isSoundOn = !isSoundOn;
+        document.getElementById('sound-icon').innerText = isSoundOn ? '🔊' : '🔇';
+        document.getElementById('sound-text').innerText = isSoundOn ? 'おと：ON' : 'おと：OFF';
+        if (isSoundOn) {
+            initAudio();
+            playSound('select');
+        }
+    }
+
+    // --- UI更新ロジック ---
+
+    // いまの単位に合わせて数字ボタンを描き直す
+    function renderNumberButtons() {
+        const selector = document.getElementById('numSelector');
+        const set = NUMBER_SETS[currentUnit];
+        selector.innerHTML = '';
+
+        set.forEach((val, i) => {
+            const digit = i + 1;
+            const btn = document.createElement('button');
+            btn.className = 'num-btn' + (val === currentNumber ? ' active' : '');
+            btn.innerHTML = `${val}<span class="num-unit">${currentUnit}</span>`;
+            btn.onclick = () => selectNumber(digit);
+            selector.appendChild(btn);
+        });
+
+        // ヒント（mLは100ずつだよ、など）
+        const hint = document.getElementById('numHint');
+        if (currentUnit === 'mL') {
+            hint.innerText = '💧 mL は 100 ずつだよ（1dL = 100mL）';
+        } else if (currentUnit === 'dL') {
+            hint.innerText = '🥤 dL は コップのカサ（10dL = 1L）';
+        } else {
+            hint.innerText = '🥛 L は 牛にゅうパックのカサだよ';
+        }
+    }
+
+    // 数字選択（digit は 1〜9）
+    function selectNumber(digit) {
+        const val = NUMBER_SETS[currentUnit][digit - 1];
+        if (val === currentNumber) return;
+        currentDigit = digit;
+        currentNumber = val;
+        playSound('select');
+
+        renderNumberButtons();
+
+        // ディスプレイとグラフィックの更新
+        updateDisplay();
+        updateVisuals();
+        updateGuide();
+    }
+
+    // 単位選択
+    function selectUnit(unit) {
+        if (unit === currentUnit) return;
+        currentUnit = unit;
+        // 同じ「位置」のすうじに合わせる（L:3 → mL:300 のように）
+        currentNumber = NUMBER_SETS[unit][currentDigit - 1];
+        playSound('select');
+
+        // アクティブカード更新
+        document.querySelectorAll('.unit-card').forEach(card => {
+            card.classList.remove('active');
+        });
+        document.getElementById(`card-${unit}`).classList.add('active');
+
+        // 数字ボタンを単位に合わせて描き直す
+        renderNumberButtons();
+
+        // 変身ボタンの更新
+        updateTransformButtons();
+
+        // ディスプレイとグラフィックの更新
+        updateDisplay();
+        updateVisuals();
+        updateGuide();
+    }
+
+    // 変身ボタンの動的作成
+    function updateTransformButtons() {
+        const container = document.getElementById('transformActions');
+        container.innerHTML = '';
+
+        const units = ['L', 'dL', 'mL'];
+
+        units.forEach(u => {
+            if (u !== currentUnit) {
+                const btn = document.createElement('button');
+                btn.className = 'transform-btn';
+
+                let label = '';
+                if (u === 'L') label = 'L（リットル）に へんしん！';
+                if (u === 'dL') label = 'dL（デシリットル）に へんしん！';
+                if (u === 'mL') label = 'mL（ミリリットル）に へんしん！';
+
+                btn.innerHTML = `<span>✨</span> ${label}`;
+                btn.onclick = () => transformTo(u);
+                container.appendChild(btn);
+            }
+        });
+    }
+
+    // ディスプレイのテキスト更新
+    function updateDisplay() {
+        document.getElementById('dispNum').innerText = currentNumber;
+        document.getElementById('dispUnit').innerText = currentUnit;
+
+        // 変化中の演出を解除しておく
+        const dispNumNode = document.getElementById('dispNum');
+        dispNumNode.className = 'number-part';
+    }
+
+    // ガイド（キャラクターのセリフ）の更新
+    function updateGuide(text = null) {
+        const bubble = document.getElementById('charBubble');
+        const mouth = document.getElementById('char-mouth');
+
+        if (text) {
+            bubble.innerHTML = text;
+            mouth.setAttribute('d', 'M43 70 Q50 78 57 70'); // 笑顔の口
+            return;
+        }
+
+        // デフォルトガイド
+        mouth.setAttribute('d', 'M47 72 Q50 75 53 72'); // 通常の口
+
+        if (currentUnit === 'L') {
+            bubble.innerHTML = `今は <strong>${currentNumber} L（リットル）</strong> だね<br>Lは牛乳パックや大きなペットボトルのカサだよ。どこに変身させる？`;
+        } else if (currentUnit === 'dL') {
+            bubble.innerHTML = `今は <strong>${currentNumber} dL（デシリットル）</strong> だね<br><span style="color:#d97706; font-weight:bold;">dLは、教科書によく出てくる「まぼろしのコップ」だよ！</span> 10個で1Lになるよ。`;
+        } else if (currentUnit === 'mL') {
+            bubble.innerHTML = `今は <strong>${currentNumber} mL（ミリリットル）</strong> だね<br>mLはとっても小さなカサだよ。1Lはなんと1000mLなんだ！`;
+        }
+    }
+
+    // 引き出しトグル
+    function toggleDrawer() {
+        isDrawerOpen = !isDrawerOpen;
+        const drawer = document.getElementById('zeroDrawer');
+        if (isDrawerOpen) {
+            drawer.classList.add('open');
+            playSound('drawer');
+        } else {
+            drawer.classList.remove('open');
+            playSound('drawer');
+        }
+    }
+
+    // --- ビジュアル（牛乳パック・コップ・シリンダー）の描画 ---
+
+    function createMilkPackSVG(index) {
+        return `
+            <div class="milk-pack-wrapper" style="animation-delay: ${index * 0.05}s">
+                <svg class="milk-pack-svg" viewBox="0 0 100 160">
+                    <!-- 影 -->
+                    <ellipse cx="50" cy="152" rx="35" ry="6" fill="#cbd5e1" opacity="0.6"/>
+                    <!-- 牛乳パック本体 -->
+                    <path d="M15 45 L50 30 L85 45 L85 150 L15 150 Z" fill="#f8fafc" stroke="#0284c7" stroke-width="4" stroke-linejoin="round"/>
+                    <!-- 屋根の傾き -->
+                    <path d="M15 45 L50 30 L50 15 L15 30 Z" fill="#bae6fd" stroke="#0284c7" stroke-width="4" stroke-linejoin="round"/>
+                    <path d="M50 30 L85 45 L85 30 L50 15 Z" fill="#7dd3fc" stroke="#0284c7" stroke-width="4" stroke-linejoin="round"/>
+                    <!-- 前面 -->
+                    <path d="M15 45 L50 45 L50 150 L15 150 Z" fill="#ffffff" stroke="#0284c7" stroke-width="4" stroke-linejoin="round"/>
+                    <!-- 側面右 -->
+                    <path d="M50 45 L85 45 L85 150 L50 150 Z" fill="#f1f5f9" stroke="#0284c7" stroke-width="4" stroke-linejoin="round"/>
+                    <!-- ラベル・デザイン -->
+                    <rect x="20" y="60" width="25" height="40" fill="#38bdf8" rx="2"/>
+                    <text x="32" y="85" fill="#ffffff" font-size="16" font-weight="bold" text-anchor="middle">1</text>
+                    <text x="32" y="105" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">L</text>
+
+                    <rect x="55" y="60" width="25" height="15" fill="#e2e8f0" rx="2"/>
+                    <text x="67" y="71" fill="#64748b" font-size="10" font-weight="bold" text-anchor="middle">ぎゅうにゅう</text>
+                </svg>
+            </div>
+        `;
+    }
+
+    // デシリットルカップ(dL)のSVG生成
+    function createCupSVG(index) {
+        return `
+            <div class="cup-wrapper" style="animation-delay: ${index * 0.05}s">
+                <svg class="cup-svg" viewBox="0 0 80 100">
+                    <!-- コップの影 -->
+                    <ellipse cx="40" cy="92" rx="25" ry="5" fill="#cbd5e1" opacity="0.6"/>
+                    <!-- 持ち手 -->
+                    <path d="M15 35 C-2 35 -2 75 15 75" fill="none" stroke="#64748b" stroke-width="5" stroke-linecap="round"/>
+                    <!-- コップのガラス背面 -->
+                    <path d="M15 20 L20 85 C21 88 25 90 30 90 L50 90 C55 90 59 88 60 85 L65 20 Z" fill="rgba(255,255,255,0.7)" stroke="#64748b" stroke-width="3" stroke-linejoin="round"/>
+                    <!-- 青い水（1dL） -->
+                    <path d="M17 35 L20 85 C21 87 23 88 28 88 L52 88 C57 88 59 87 60 85 L63 35 Z" fill="#3b82f6" opacity="0.8"/>
+                    <!-- 水面の波紋 -->
+                    <ellipse cx="40" cy="35" rx="23" ry="3" fill="#60a5fa"/>
+                    <!-- ガラス前面のハイライト・目盛り -->
+                    <line x1="20" y1="55" x2="35" y2="55" stroke="#94a3b8" stroke-width="2"/>
+                    <text x="40" y="58" fill="#64748b" font-size="9" font-weight="bold">0.5</text>
+                    <!-- 「1 dL」のテキスト -->
+                    <text x="40" y="75" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">1 dL</text>
+                    <!-- コップのふち -->
+                    <ellipse cx="40" cy="20" rx="25" ry="4" fill="none" stroke="#64748b" stroke-width="3"/>
+                </svg>
+            </div>
+        `;
+    }
+
+    // メスシリンダー(mL)のSVG生成
+    function createCylinderSVG(value, unit) {
+        const isSmallScale = value < 1000;
+        const maxVal = isSmallScale ? 1000 : 10000;
+        const step = isSmallScale ? 100 : 1000;
+
+        const fillPercent = Math.min((value / maxVal) * 100, 100);
+        const liquidY = 190 - (fillPercent * 1.4);
+        const liquidHeight = fillPercent * 1.4;
+
+        let ticks = '';
+        for (let i = step; i < maxVal; i += step) {
+            const tickY = 190 - ((i / maxVal) * 140);
+            const labelText = isSmallScale ? `${i}mL` : `${i/1000}L`;
+            if (isSmallScale && (i % 200 !== 0)) {
+                ticks += `<line x1="30" y1="${tickY}" x2="40" y2="${tickY}" stroke="#94a3b8" stroke-width="1.5"/>`;
+            } else {
+                ticks += `
+                    <line x1="30" y1="${tickY}" x2="45" y2="${tickY}" stroke="#64748b" stroke-width="2"/>
+                    <text x="24" y="${tickY + 4}" fill="#64748b" font-size="9" text-anchor="end">${labelText}</text>
+                `;
+            }
+        }
+
+        let drips = '';
+        for (let i = 0; i < 6; i++) {
+            const left = Math.random() * 50 + 5;
+            const delay = Math.random() * 0.5;
+            const duration = Math.random() * 0.4 + 0.4;
+            drips += `<div class="drip-particle" style="left: ${left}px; animation-delay: ${delay}s; animation-duration: ${duration}s;"></div>`;
+        }
+
+        const topLabelText = isSmallScale ? "1000mL (1L)" : "10 L";
+
+        return `
+            <div class="cylinder-wrapper">
+                <div class="cylinder-svg-container">
+                    <div class="drip-shower-container">
+                        ${drips}
+                    </div>
+                    <svg class="cylinder-svg" viewBox="0 0 140 240">
+                        <ellipse cx="70" cy="215" rx="45" ry="12" fill="#cbd5e1" stroke="#94a3b8" stroke-width="3"/>
+                        <rect x="35" y="30" width="70" height="170" rx="5" fill="rgba(255,255,255,0.7)" stroke="#64748b" stroke-width="3"/>
+                        <rect x="37" y="${liquidY}" width="66" height="${liquidHeight}" fill="#3b82f6" opacity="0.8"/>
+                        ${liquidHeight > 0 ? `<ellipse cx="70" cy="${liquidY}" rx="33" ry="4" fill="#60a5fa"/>` : ''}
+                        ${ticks}
+
+                        <!-- 上部目盛り (1000mL または 10L) -->
+                        <line x1="35" y1="50" x2="55" y2="50" stroke="#ef4444" stroke-width="3"/>
+                        <text x="24" y="54" fill="#ef4444" font-size="10" font-weight="bold" text-anchor="end">${topLabelText}</text>
+
+                        <text x="70" y="120" fill="rgba(0,0,0,0.15)" font-size="28" font-weight="bold" text-anchor="middle" transform="rotate(-90 70 120)">mL Meter</text>
+                    </svg>
+                </div>
+
+                <div class="cylinder-info">
+                    <div class="cylinder-info-title">📊 カサのメーター</div>
+                    <div class="cylinder-info-row">
+                        <span style="color:#64748b">いまのカサ:</span>
+                        <strong style="color:#2563eb; font-size:14px;">${value} mL</strong>
+                    </div>
+                    <div class="cylinder-info-row" style="border-top:1px solid #f1f5f9; padding-top:4px;">
+                        <span>Lになおすと:</span>
+                        <strong>${(value / 1000).toFixed(1)} L</strong>
+                    </div>
+                    <div class="cylinder-info-row">
+                        <span>dLになおすと:</span>
+                        <strong>${(value / 100).toFixed(0)} dL</strong>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // グラフィックエリアの表示を更新する
+    function updateVisuals() {
+        const container = document.getElementById('visualContainer');
+        container.innerHTML = '';
+
+        if (currentUnit === 'L') {
+            // 牛乳パックを個数分ならべる
+            for (let i = 0; i < currentNumber; i++) {
+                container.innerHTML += createMilkPackSVG(i);
+            }
+        } else if (currentUnit === 'dL') {
+            // コップを個数分ならべる（10個ごとにトレーで囲む）
+            const totalCups = currentNumber;
+            const trayCount = Math.ceil(totalCups / 10);
+
+            for (let t = 0; t < trayCount; t++) {
+                const trayDiv = document.createElement('div');
+                trayDiv.className = 'dl-tray';
+
+                // トレーのラベル（Lとの対応を示す）
+                const trayLabel = document.createElement('div');
+                trayLabel.className = 'dl-tray-label';
+                trayLabel.innerText = `牛乳パック ${t + 1}本分 (1 L)`;
+                trayDiv.appendChild(trayLabel);
+
+                // トレーに入れるコップの数（最大10）
+                const cupsInTray = Math.min(totalCups - (t * 10), 10);
+                for (let c = 0; c < cupsInTray; c++) {
+                    trayDiv.innerHTML += createCupSVG(t * 10 + c);
+                }
+
+                container.appendChild(trayDiv);
+            }
+        } else if (currentUnit === 'mL') {
+            // メスシリンダーによる表現
+            container.innerHTML = createCylinderSVG(currentNumber, 'mL');
+        }
+    }
+
+    // --- 変身ロジックとアニメーション ---
+
+    function transformTo(target) {
+        targetUnit = target;
+        const startUnit = currentUnit;
+        const startNum = currentNumber;
+
+        // 変換後の値の計算
+        let finalNum = startNum;
+        let zeroCount = 0; // 増える0の数
+        let removeZeroCount = 0; // 減る0の数 (逆変換)
+
+        if (startUnit === 'L' && target === 'dL') {
+            finalNum = startNum * 10;
+            zeroCount = 1;
+        } else if (startUnit === 'L' && target === 'mL') {
+            finalNum = startNum * 1000;
+            zeroCount = 3;
+        } else if (startUnit === 'dL' && target === 'mL') {
+            finalNum = startNum * 100;
+            zeroCount = 2;
+        } else if (startUnit === 'dL' && target === 'L') {
+            // 逆変換：10dLで1Lになる。1桁のdLは1Lより小さいので変身できない
+            if (startNum < 10) {
+                playSound('error');
+                updateGuide(`あれれ？ <strong>${startNum} dL</strong> は 1 L より小さいから、L（ボス）に変身できないよ。<br>先に <strong>L</strong> から <strong>dL</strong> に変身して、数字が大きくなってから戻してみてね。`);
+                shakeDisplay();
+                return;
+            }
+            finalNum = startNum / 10;
+            removeZeroCount = 1;
+        } else if (startUnit === 'mL' && target === 'L') {
+            if (startNum < 1000) {
+                playSound('error');
+                updateGuide(`あれれ？ <strong>${startNum} mL</strong> は 1 L より小さいから、L（ボス）に変身できないよ。<br>先に L から mL に変身してみてね。`);
+                shakeDisplay();
+                return;
+            }
+            finalNum = startNum / 1000;
+            removeZeroCount = 3;
+        } else if (startUnit === 'mL' && target === 'dL') {
+            if (startNum < 100) {
+                playSound('error');
+                updateGuide(`あれれ？ <strong>${startNum} mL</strong> は 1 dL より小さいから、dL に変身できないよ。<br>先に dL から mL に変身してみてね。`);
+                shakeDisplay();
+                return;
+            }
+            finalNum = startNum / 100;
+            removeZeroCount = 2;
+        }
+
+        // アニメーション実行
+        if (zeroCount > 0) {
+            // 0が増えるアニメーション (引き出しから飛び出す)
+            animateZerosIncoming(startNum, startUnit, finalNum, target, zeroCount);
+        } else if (removeZeroCount > 0) {
+            // 0が減るアニメーション (お片付けされる)
+            animateZerosOutgoing(startNum, startUnit, finalNum, target, removeZeroCount);
+        }
+    }
+
+    // 画面のディスプレイを揺らす（エラー演出）
+    function shakeDisplay() {
+        const display = document.getElementById('displayPanel');
+        display.style.animation = 'none';
+        display.offsetHeight; /* trigger reflow */
+        display.style.animation = 'shake 0.4s ease-out';
+    }
+
+    // （シェイクアニメーションの @keyframes shake は CSS 側に定義済み）
+
+    // --- アニメーション: 0が増えて合体する ---
+    function animateZerosIncoming(startNum, startUnit, finalNum, target, count) {
+        // 引き出しを開ける
+        isDrawerOpen = true;
+        document.getElementById('zeroDrawer').classList.add('open');
+        playSound('drawer');
+
+        // 少し待って0が飛び出す
+        setTimeout(() => {
+            const drawer = document.getElementById('zeroDrawer');
+            const drawerRect = drawer.getBoundingClientRect();
+            const dispNum = document.getElementById('dispNum');
+            const dispRect = dispNum.getBoundingClientRect();
+
+            // 飛び出す0を生成して動かす
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    createFlyingZero(
+                        drawerRect.left + drawerRect.width / 2,
+                        drawerRect.top + 10,
+                        dispRect.right + (i * 20) + 10,
+                        dispRect.top - 5,
+                        () => {
+                            if (i === count - 1) {
+                                // 最後の0が合体したら、状態を完全に切り替える
+                                applyTransformationState(finalNum, target, 'incoming', count);
+                            }
+                        }
+                    );
+                }, i * 250); // 0.25秒おきに飛び出させる
+            }
+        }, 300);
+    }
+
+    // 飛び出す0のDOM要素作成と放物線アニメーション
+    function createFlyingZero(startX, startY, endX, endY, callback) {
+        const zero = document.createElement('div');
+        zero.className = 'flying-zero';
+        zero.innerText = '0';
+        zero.style.left = `${startX + window.scrollX - 18}px`;
+        zero.style.top = `${startY + window.scrollY - 18}px`;
+        document.body.appendChild(zero);
+
+        playSound('select');
+
+        // ベジエ曲線風のイージングで移動させる
+        const startTime = performance.now();
+        const duration = 600; // 0.6秒
+
+        // 制御点（上に膨らむ放物線にする）
+        const ctrlX = (startX + endX) / 2;
+        const ctrlY = Math.min(startY, endY) - 80;
+
+        function animate(time) {
+            const elapsed = time - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+
+            // 2次ベジエ曲線
+            const x = (1 - progress) * (1 - progress) * startX + 2 * (1 - progress) * progress * ctrlX + progress * progress * endX;
+            const y = (1 - progress) * (1 - progress) * startY + 2 * (1 - progress) * progress * ctrlY + progress * progress * endY;
+
+            zero.style.left = `${x + window.scrollX - 18}px`;
+            zero.style.top = `${y + window.scrollY - 18}px`;
+            zero.style.transform = `scale(${1 + Math.sin(progress * Math.PI) * 0.4}) rotate(${progress * 360}deg)`;
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                zero.remove();
+                createConfetti(endX, endY);
+                callback();
+            }
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    // --- アニメーション: 0が減ってお片付けされる ---
+    function animateZerosOutgoing(startNum, startUnit, finalNum, target, count) {
+        // まずディスプレイの消える0にバツマークをつけ、シュッと消す
+        const dispNum = document.getElementById('dispNum');
+        const numStr = startNum.toString();
+        const baseNum = numStr.substring(0, numStr.length - count);
+        const zerosToHide = numStr.substring(numStr.length - count);
+
+        // バツ付きの0をスパンで囲んで再描画
+        let numHTML = `<span>${baseNum}</span>`;
+        for (let i = 0; i < count; i++) {
+            numHTML += `<span class="removed-zero" style="animation-delay: ${i * 0.1}s">0</span>`;
+        }
+        dispNum.innerHTML = numHTML;
+
+        // 引き出しを開ける
+        isDrawerOpen = true;
+        document.getElementById('zeroDrawer').classList.add('open');
+        playSound('drawer');
+        playSound('cleanup');
+
+        // アニメーション完了後に状態を完全に切り替え、引き出しを閉じる
+        setTimeout(() => {
+            applyTransformationState(finalNum, target, 'outgoing', count);
+
+            setTimeout(() => {
+                isDrawerOpen = false;
+                document.getElementById('zeroDrawer').classList.remove('open');
+                playSound('drawer');
+            }, 500);
+
+        }, count * 100 + 500);
+    }
+
+    // 状態の適用と紙吹雪・ハイライト
+    function applyTransformationState(finalNum, target, direction, count) {
+        // 状態を更新
+        currentNumber = finalNum;
+        currentUnit = target;
+
+        // 変身後の数字が、その単位のボタンにあれば「位置」も合わせる
+        const idx = NUMBER_SETS[currentUnit].indexOf(finalNum);
+        if (idx >= 0) currentDigit = idx + 1;
+
+        // カードの選択状態も更新
+        document.querySelectorAll('.unit-card').forEach(card => {
+            card.classList.remove('active');
+        });
+        document.getElementById(`card-${target}`).classList.add('active');
+
+        // 数字ボタンを新しい単位に合わせて描き直す
+        renderNumberButtons();
+
+        // ディスプレイを再構成し、ハイライトを適用
+        const dispNum = document.getElementById('dispNum');
+        const dispUnit = document.getElementById('dispUnit');
+        dispUnit.innerText = target;
+
+        if (direction === 'incoming') {
+            const numStr = finalNum.toString();
+            const base = numStr.substring(0, numStr.length - count);
+            const zeros = numStr.substring(numStr.length - count);
+
+            dispNum.innerHTML = `<span>${base}</span><span class="highlight-zero">${zeros}</span>`;
+            playSound('transform');
+
+            // キャラクター解説
+            let explanation = '';
+            if (direction === 'incoming') {
+                if (count === 1) explanation = `すごーい！ 0が <strong>1つ</strong> くっついて <strong>${finalNum} ${target}</strong> にへんしんしたよ！`;
+                if (count === 2) explanation = `大へんしん！ 0が <strong>2つ</strong> くっついて <strong>${finalNum} ${target}</strong> になったよ！`;
+                if (count === 3) explanation = `ウルトラへんしん！ 0が <strong>3つ</strong> もくっついて <strong>${finalNum} ${target}</strong> になったよ！`;
+            }
+            updateGuide(`✨ <strong>へんしん大せいこう！</strong> ✨<br>${explanation}<br>カサのイラストも増えているから、見てみてね。`);
+        } else {
+            // お片付けされた時
+            dispNum.innerHTML = `<span>${finalNum}</span>`;
+            playSound('transform');
+            updateGuide(`✨ <strong>もとにもどったよ！</strong> ✨<br>ボス（L）や大きな単位にもどるときは、0を <strong>${count}つ</strong> 「ひきだし」にお片付けするんだね。`);
+        }
+
+        // 変身ボタンの更新
+        updateTransformButtons();
+
+        // グラフィックの更新
+        updateVisuals();
+    }
+
+    // 紙吹雪（パーティクル）エフェクト
+    function createConfetti(x, y) {
+        const colors = ['#facc15', '#38bdf8', '#4ade80', '#f472b6', '#a78bfa'];
+        for (let i = 0; i < 15; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.left = `${x + window.scrollX}px`;
+            confetti.style.top = `${y + window.scrollY}px`;
+
+            // ランダムな方向に散らす
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = Math.random() * 8 + 4;
+            const vx = Math.cos(angle) * velocity;
+            const vy = Math.sin(angle) * velocity - 3; // 少し上向きに
+
+            document.body.appendChild(confetti);
+
+            let posX = x;
+            let posY = y;
+            const startTime = performance.now();
+
+            function updateConfetti(time) {
+                const elapsed = (time - startTime) / 1000;
+                if (elapsed > 1.2) {
+                    confetti.remove();
+                    return;
+                }
+
+                // 物理演算風の移動
+                posX += vx;
+                posY += vy + (9.8 * elapsed); // 重力
+                confetti.style.left = `${posX + window.scrollX}px`;
+                confetti.style.top = `${posY + window.scrollY}px`;
+                confetti.style.transform = `rotate(${elapsed * 720}deg) scale(${1 - elapsed/1.2})`;
+
+                requestAnimationFrame(updateConfetti);
+            }
+
+            requestAnimationFrame(updateConfetti);
+        }
+    }
+
+    // =====================================================================
+    //  モード切り替え
+    // =====================================================================
+    function showMode(mode) {
+        document.querySelectorAll('.mode-view').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('mode-' + mode).classList.add('active');
+        document.getElementById('tab-' + mode).classList.add('active');
+        playSound('select');
+    }
+
+    // =====================================================================
+    //  きょうつう：計算ヘルパー
+    // =====================================================================
+    // L=1000mL, dL=100mL でぜんぶ mL になおして考える
+    function totalMl(q) { return q.L * 1000 + q.dL * 100 + q.mL; }
+
+    // mL の合計を L・dL・mL に わけ直す（くりあがり・くりさがりの整理）
+    function normalize(total) {
+        const L = Math.floor(total / 1000);
+        let r = total % 1000;
+        const dL = Math.floor(r / 100);
+        const mL = r % 100;
+        return { L, dL, mL };
+    }
+
+    // 「2L 5dL 300mL」のような文字列に
+    function fmt(q) {
+        const parts = [];
+        if (q.L) parts.push(q.L + 'L');
+        if (q.dL) parts.push(q.dL + 'dL');
+        if (q.mL) parts.push(q.mL + 'mL');
+        return parts.length ? parts.join(' ') : '0';
+    }
+
+    // =====================================================================
+    //  きょうつう：フラットイラスト（SVG）
+    // =====================================================================
+    // 牛にゅうパック（1L）
+    function svgCarton() {
+        return `<svg class="ill-carton" viewBox="0 0 60 96">
+            <polygon points="12,30 30,20 48,30 48,90 12,90" fill="#bfdbfe"/>
+            <polygon points="12,30 30,20 30,10 12,20" fill="#93c5fd"/>
+            <polygon points="30,20 48,30 48,20 30,10" fill="#60a5fa"/>
+            <rect x="18" y="44" width="24" height="30" rx="3" fill="#2563eb"/>
+            <text x="30" y="64" fill="#fff" font-size="14" font-weight="bold" text-anchor="middle">1L</text>
+            <polygon points="12,30 30,20 48,30 48,90 12,90" fill="none" stroke="#1d4ed8" stroke-width="2.5" stroke-linejoin="round"/>
+        </svg>`;
+    }
+
+    // コップ（200mL = 2dL）。level=1で満タン、0.5で半分
+    function svgCup(level) {
+        const topY = 24, botY = 78;
+        const waterY = botY - (botY - topY) * level;
+        const t = (waterY - topY) / (botY - topY);
+        const lx = (13 + 6 * t).toFixed(1);
+        const rx = (47 - 6 * t).toFixed(1);
+        const wy = waterY.toFixed(1);
+        const rad = ((rx - lx) / 2).toFixed(1);
+        return `<svg class="ill-cup" viewBox="0 0 60 90">
+            <polygon points="13,24 47,24 41,78 19,78" fill="#eef2f7"/>
+            <polygon points="${lx},${wy} ${rx},${wy} 41,78 19,78" fill="#38bdf8"/>
+            <ellipse cx="30" cy="${wy}" rx="${rad}" ry="2.5" fill="#7dd3fc"/>
+            <polygon points="13,24 47,24 41,78 19,78" fill="none" stroke="#64748b" stroke-width="2.5" stroke-linejoin="round"/>
+            <ellipse cx="30" cy="24" rx="17" ry="3" fill="none" stroke="#64748b" stroke-width="2.5"/>
+        </svg>`;
+    }
+
+    // メモリつきビーカー（1000mLまで）。mLの分だけ水を入れる
+    function svgBeaker(mL) {
+        const top = 22, bottom = 178, h = bottom - top, cap = 1000;
+        const lvl = Math.min(Math.max(mL, 0) / cap, 1);
+        const waterY = bottom - h * lvl;
+        let ticks = '';
+        for (let i = 100; i <= 1000; i += 100) {
+            const y = (bottom - h * (i / cap)).toFixed(1);
+            ticks += `<line x1="46" y1="${y}" x2="56" y2="${y}" stroke="#94a3b8" stroke-width="1.5"/>`;
+            ticks += `<text x="59" y="${(parseFloat(y) + 3).toFixed(1)}" font-size="8" fill="#64748b" text-anchor="start">${i}</text>`;
+        }
+        const water = mL > 0
+            ? `<rect x="25" y="${waterY.toFixed(1)}" width="30" height="${(bottom - waterY).toFixed(1)}" fill="#38bdf8"/>
+               <ellipse cx="40" cy="${waterY.toFixed(1)}" rx="15" ry="2.5" fill="#7dd3fc"/>`
+            : '';
+        return `<svg class="ill-beaker" viewBox="0 0 80 190">
+            <rect x="25" y="22" width="30" height="156" rx="3" fill="#f1f5f9"/>
+            ${water}
+            ${ticks}
+            <rect x="25" y="22" width="30" height="156" rx="3" fill="none" stroke="#64748b" stroke-width="2.5"/>
+        </svg>`;
+    }
+
+    // L・dL・mL の量をイラストの「グループ」で表示
+    function illGroups(q) {
+        let html = '';
+        if (q.L > 0) {
+            let items = '';
+            for (let i = 0; i < q.L; i++) items += svgCarton();
+            html += `<div class="ill-group">
+                <div class="ill-group-title">L：牛にゅうパック ${q.L}本</div>
+                <div class="ill-items">${items}</div>
+                <div class="ill-cap">1本 = 1L</div>
+            </div>`;
+        }
+        if (q.dL > 0) {
+            const full = Math.floor(q.dL / 2);
+            const half = q.dL % 2;
+            let items = '';
+            for (let i = 0; i < full; i++) items += svgCup(0.92);
+            if (half) items += svgCup(0.5);
+            let cupText;
+            if (full > 0) cupText = `コップ ${full}ぱい` + (half ? ' と はんぶん' : '');
+            else cupText = 'コップ はんぶん';
+            html += `<div class="ill-group">
+                <div class="ill-group-title">dL：${cupText}</div>
+                <div class="ill-items">${items}</div>
+                <div class="ill-cap">コップ1ぱい = 200mL（2dL）</div>
+            </div>`;
+        }
+        if (q.mL > 0) {
+            html += `<div class="ill-group">
+                <div class="ill-group-title">mL：ビーカー ${q.mL}mL</div>
+                <div class="ill-items">${svgBeaker(q.mL)}</div>
+                <div class="ill-cap">1000mL まで はかれるよ</div>
+            </div>`;
+        }
+        if (!html) html = '<div class="ill-empty">からっぽ（0）だよ</div>';
+        return html;
+    }
+
+    // 単位ごとの入力はんい
+    const RANGES = {
+        L:  { min: 0, max: 9,   step: 1 },
+        dL: { min: 0, max: 9,   step: 1 },
+        mL: { min: 0, max: 900, step: 100 }
+    };
+
+    // =====================================================================
+    //  モード②：かずをつくる
+    // =====================================================================
+    const build = { L: 2, dL: 5, mL: 300 };
+
+    function buildStep(unit, dir) {
+        const r = RANGES[unit];
+        let v = build[unit] + dir * r.step;
+        if (v < r.min) v = r.min;
+        if (v > r.max) v = r.max;
+        if (v === build[unit]) return;
+        build[unit] = v;
+        playSound('select');
+        renderBuild();
+    }
+
+    function buildStepperHTML(unit, labelBig) {
+        return `<div class="unit-col">
+            <div class="unit-col-head ${unit}">${labelBig}</div>
+            <div class="stepper">
+                <button class="step-btn minus" onclick="buildStep('${unit}',-1)">−</button>
+                <span class="stepper-val">${build[unit]}</span>
+                <button class="step-btn plus" onclick="buildStep('${unit}',1)">＋</button>
+            </div>
+        </div>`;
+    }
+
+    function renderBuild() {
+        const total = totalMl(build);
+        const lText = (total / 1000).toFixed(total % 1000 === 0 ? 0 : 1);
+        document.getElementById('mode-tsukuru').innerHTML = `
+            <div class="mode-intro">L・dL・mL を じゆうに えらんで、じぶんだけの「カサ」を つくろう！</div>
+            <div class="build-grid">
+                ${buildStepperHTML('L', 'L')}
+                ${buildStepperHTML('dL', 'dL')}
+                ${buildStepperHTML('mL', 'mL')}
+            </div>
+            <div class="total-banner">
+                つくったカサ： <strong>${fmt(build)}</strong>
+                <span class="total-sub">＝ ぜんぶで ${total}mL ＝ ${lText}L</span>
+            </div>
+            <div class="ill-area">${illGroups(build)}</div>
+        `;
+    }
+
+    // =====================================================================
+    //  モード③④：たしざん / ひきざん
+    // =====================================================================
+    const calcState = {
+        tashizan: { A: { L: 1, dL: 5, mL: 0 }, B: { L: 0, dL: 8, mL: 0 }, done: false, result: null },
+        hikizan:  { A: { L: 2, dL: 3, mL: 0 }, B: { L: 0, dL: 7, mL: 0 }, done: false, result: null }
+    };
+
+    function calcStep(mode, operand, unit, dir) {
+        const r = RANGES[unit];
+        const q = calcState[mode][operand];
+        let v = q[unit] + dir * r.step;
+        if (v < r.min) v = r.min;
+        if (v > r.max) v = r.max;
+        if (v === q[unit]) return;
+        q[unit] = v;
+        calcState[mode].done = false; // 数字を変えたら答えはリセット
+        playSound('select');
+        renderCalc(mode);
+    }
+
+    function calcStepperHTML(mode, operand, unit, value) {
+        return `<div class="stepper">
+            <span class="unit-tag ${unit}">${unit}</span>
+            <button class="step-btn minus" onclick="calcStep('${mode}','${operand}','${unit}',-1)">−</button>
+            <span class="stepper-val">${value}</span>
+            <button class="step-btn plus" onclick="calcStep('${mode}','${operand}','${unit}',1)">＋</button>
+        </div>`;
+    }
+
+    function operandBlockHTML(mode, operand, q, title) {
+        return `<div class="operand">
+            <div class="operand-title">${title}</div>
+            <div class="operand-val">${fmt(q)}</div>
+            <div class="operand-steppers">
+                ${calcStepperHTML(mode, operand, 'L', q.L)}
+                ${calcStepperHTML(mode, operand, 'dL', q.dL)}
+                ${calcStepperHTML(mode, operand, 'mL', q.mL)}
+            </div>
+            <div class="operand-ill">${illGroups(q)}</div>
+        </div>`;
+    }
+
+    function doCalc(mode) {
+        const s = calcState[mode];
+        const ta = totalMl(s.A), tb = totalMl(s.B);
+
+        if (mode === 'hikizan' && tb > ta) {
+            s.done = true;
+            s.result = { error: true };
+            playSound('error');
+            renderCalc(mode);
+            return;
+        }
+
+        const total = mode === 'tashizan' ? ta + tb : ta - tb;
+        s.result = { error: false, total, q: normalize(total), ta, tb };
+        s.done = true;
+        playSound('transform');
+        renderCalc(mode);
+    }
+
+    function resultHTML(mode, s) {
+        const r = s.result;
+        if (r.error) {
+            return `<div class="result-error">あれれ？ ひく「い」のほうが 大きいよ。<br>「い」を 小さく するか、「あ」を 大きく してね。</div>`;
+        }
+        const sign = mode === 'tashizan' ? '＋' : '−';
+        // くりあがり・くりさがりがあったか（イラスト合計と整理後で形がちがう）
+        const regrouped = (mode === 'tashizan')
+            ? (s.A.dL + s.B.dL >= 10 || s.A.mL + s.B.mL >= 100)
+            : (s.B.dL > s.A.dL || s.B.mL > s.A.mL);
+        const note = regrouped
+            ? `<div class="result-note">✨ ${mode === 'tashizan' ? '10dLで1L・100mLで1dL に くりあがり！' : '1Lを10dL・1dLを100mL に くずして けいさん！'}</div>`
+            : '';
+        return `<div class="result-banner">
+                <div class="result-eq">${fmt(s.A)} ${sign} ${fmt(s.B)} ＝ <strong>${fmt(r.q)}</strong></div>
+                <div class="result-sub">ぜんぶ mL で： ${r.ta}mL ${sign} ${r.tb}mL ＝ ${r.total}mL</div>
+                ${note}
+            </div>
+            <div class="result-ill-title">こたえの カサ</div>
+            <div class="ill-area">${illGroups(r.q)}</div>`;
+    }
+
+    function renderCalc(mode) {
+        const s = calcState[mode];
+        const sign = mode === 'tashizan' ? '＋' : '−';
+        const intro = mode === 'tashizan'
+            ? 'ふたつの カサを たしてみよう！ ボタンで すうじを かえてね。'
+            : 'カサの ちがい（のこり）を もとめよう！ ボタンで すうじを かえてね。';
+        document.getElementById('mode-' + mode).innerHTML = `
+            <div class="mode-intro">${intro}</div>
+            <div class="calc-grid">
+                ${operandBlockHTML(mode, 'A', s.A, 'あ')}
+                <div class="calc-sign">${sign}</div>
+                ${operandBlockHTML(mode, 'B', s.B, 'い')}
+            </div>
+            <button class="calc-btn" onclick="doCalc('${mode}')">＝ こたえを みる！</button>
+            <div class="calc-result">${s.done ? resultHTML(mode, s) : ''}</div>
+        `;
+    }
+
+    // --- 初期起動セットアップ ---
+    window.addEventListener('load', () => {
+        // モード①：へんしん
+        renderNumberButtons();
+        updateTransformButtons();
+        updateDisplay();
+        updateVisuals();
+        updateGuide();
+        // モード②〜④
+        renderBuild();
+        renderCalc('tashizan');
+        renderCalc('hikizan');
+    });
+</script>
+
+</body>
+</html>
