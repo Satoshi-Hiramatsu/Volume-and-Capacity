@@ -1,0 +1,135 @@
+{
+  "version": 1,
+  "readme": "README.md",
+  "start": {
+    "command": "npm run serve",
+    "readyUrl": "http://127.0.0.1:8788/",
+    "timeoutSeconds": 60
+  },
+  "screenshots": [
+    {
+      "id": "home-screen",
+      "path": "docs/screenshots/home-screen.png",
+      "url": "http://127.0.0.1:8788/#home",
+      "alt": "ホーム画面。ヒーロー、学習メニュー4枚、今日のかさクイズ、単位まとめ",
+      "viewport": { "width": 1440, "height": 950 },
+      "fullPage": true,
+      "waitFor": ".home-hero",
+      "steps": []
+    },
+    {
+      "id": "learn-lab",
+      "path": "docs/screenshots/learn-lab.png",
+      "url": "http://127.0.0.1:8788/#learn?tab=lab",
+      "alt": "まなぶ画面のへんしんラボ。1Lますの水量とL・dL・mLの同時表示、1dLブロックの可視化",
+      "viewport": { "width": 1440, "height": 790 },
+      "fullPage": false,
+      "waitFor": ".sub-tabs",
+      "steps": [
+        { "action": "check", "target": "1dLブロック(10分割)を可視化", "selector": "#checkShowBlocks" },
+        { "action": "scroll", "target": "ページ最上部" }
+      ]
+    },
+    {
+      "id": "learn-calc",
+      "path": "docs/screenshots/learn-calc.png",
+      "url": "http://127.0.0.1:8788/#learn?tab=calc",
+      "alt": "まなぶ画面のけいさん。10dLが1Lにくりあがる様子と計算結果の表示",
+      "viewport": { "width": 1440, "height": 730 },
+      "fullPage": false,
+      "waitFor": ".sub-tabs",
+      "steps": []
+    },
+    {
+      "id": "learn-zukan",
+      "path": "docs/screenshots/learn-zukan.png",
+      "url": "http://127.0.0.1:8788/#learn?tab=zukan",
+      "alt": "みぢかなかさ図鑑。牛乳パック1L、ペットボトル500mL、コップ200mL、スプーン15mLの比較",
+      "viewport": { "width": 1440, "height": 650 },
+      "fullPage": false,
+      "waitFor": ".sub-tabs",
+      "steps": []
+    },
+    {
+      "id": "practice-quiz",
+      "path": "docs/screenshots/practice-quiz.png",
+      "url": "http://127.0.0.1:8788/#practice?d=2",
+      "alt": "れんしゅう画面。4択問題に正解した直後の判定表示とかいせつ",
+      "viewport": { "width": 1440, "height": 830 },
+      "fullPage": false,
+      "waitFor": ".practice-container",
+      "steps": [
+        { "action": "click", "target": "れんしゅうを はじめる！" },
+        { "action": "click", "target": "正解の選択肢（.quiz-opt-btn.wrong が出た場合は再読み込みして引き直す）" }
+      ]
+    },
+    {
+      "id": "print-screen",
+      "path": "docs/screenshots/print-screen.png",
+      "url": "http://127.0.0.1:8788/#print?d=2&n=8&out=both&seed=247150",
+      "alt": "A4プリント作成画面。左に難易度・問題種類・問題数の設定、右にA4プレビュー",
+      "viewport": { "width": 1440, "height": 1040 },
+      "fullPage": false,
+      "waitFor": ".a4-sheet",
+      "steps": []
+    },
+    {
+      "id": "a4-question-sheet",
+      "path": "docs/screenshots/a4-question-sheet.png",
+      "url": "http://127.0.0.1:8788/#print?d=2&n=8&out=both&seed=247150",
+      "alt": "生成されたA4問題用紙（シード247150）",
+      "viewport": { "width": 900, "height": 1200 },
+      "fullPage": false,
+      "waitFor": ".a4-sheet",
+      "clipSelector": ".a4-sheet:not(.is-answer-sheet)",
+      "printMedia": true,
+      "exactDimensions": { "width": 794, "height": 1123 },
+      "steps": [
+        { "action": "emulate-media", "target": "print" }
+      ]
+    },
+    {
+      "id": "a4-answer-sheet",
+      "path": "docs/screenshots/a4-answer-sheet.png",
+      "url": "http://127.0.0.1:8788/#print?d=2&n=8&out=both&seed=247150",
+      "alt": "生成されたA4解答シート（シード247150）。赤字の答えと1問ごとのかいせつ",
+      "viewport": { "width": 900, "height": 1200 },
+      "fullPage": false,
+      "waitFor": ".a4-sheet.is-answer-sheet",
+      "clipSelector": ".a4-sheet.is-answer-sheet",
+      "printMedia": true,
+      "exactDimensions": { "width": 794, "height": 1124 },
+      "steps": [
+        { "action": "emulate-media", "target": "print" }
+      ]
+    },
+    {
+      "id": "phone-learn",
+      "path": "docs/screenshots/phone-learn.png",
+      "url": "http://127.0.0.1:8788/#learn?tab=lab",
+      "alt": "スマートフォンでのへんしんラボ表示",
+      "viewport": { "width": 390, "height": 844 },
+      "fullPage": false,
+      "waitFor": ".sub-tabs",
+      "steps": [
+        { "action": "check", "target": "1dLブロック(10分割)を可視化", "selector": "#checkShowBlocks" },
+        { "action": "scroll", "target": "ページ最上部" }
+      ]
+    },
+    {
+      "id": "phone-print",
+      "path": "docs/screenshots/phone-print.png",
+      "url": "http://127.0.0.1:8788/#print?d=2&n=8&out=both&seed=247150",
+      "alt": "スマートフォンでのA4プリント作成画面。プレビューが画面幅に収まり、生成と印刷のボタンが画面下部に固定表示される",
+      "viewport": { "width": 390, "height": 844 },
+      "fullPage": false,
+      "waitFor": ".print-actions",
+      "steps": [
+        { "action": "scroll", "target": "ページ最下部" }
+      ]
+    }
+  ],
+  "checks": [
+    "npx wrangler deploy --dry-run"
+  ]
+}
